@@ -1,16 +1,7 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
-from django.dispatch import receiver
-from django.urls import reverse
-# from django_rest_passwordreset.signals import reset_password_token_created
-from django.core.mail import send_mail  
-
-
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -51,7 +42,7 @@ class MyUser(AbstractBaseUser):
     )
     username=models.CharField(max_length=100)
     mobile=models.CharField(max_length=12)
-    dob = models.DateField(max_length=8)
+    dob = models.DateField(max_length=8,null=True,blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 

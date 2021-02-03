@@ -20,7 +20,7 @@ class RegisterView(viewsets.ViewSet):
             email=request.data.get('email')
             user_email=MyUser.objects.filter(email=email)
             if  user_email:
-                return Response('already regster email')
+                return Response('already register email')
 
             myuser=MyUser()
             myuser.email=email
