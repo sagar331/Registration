@@ -155,7 +155,7 @@ class DetailViewSet(viewsets.ViewSet):
         image=request.data.get('image')
         detail_Object.image = image
         detail_Object.save() 
-        return Response({"response":'Create Data'})        
+        return Response({"response":'Update_Data'})        
     def create(self,request):
         detail_id=request.data.get('detail_id')
         detail_create=MyUser.objects.get(id=detail_id)
