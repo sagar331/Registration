@@ -1,6 +1,4 @@
 from django.shortcuts import render
-# Create your views here.
-from django.shortcuts import render
 from app.models import *
 from rest_framework.response import Response
 from rest_framework import viewsets,status
@@ -23,11 +21,10 @@ class RegisterView(viewsets.ViewSet):
                 return Response('already register email')
 
             myuser=MyUser()
-            myuser.email=email
+            myuser.email=request.data.get('email')
             myuser.username=request.data.get('username')
             myuser.set_password(request.data.get('password'))
             myuser.mobile=request.data.get('mobile')
-            myuser.dob=request.data.get('dob')
             myuser.is_active=True
             myuser.save()
             app = Application.objects.create(user=myuser)
@@ -57,13 +54,11 @@ class RegisterView(viewsets.ViewSet):
                 }
             
             return Response({'response':'you are sign up successfull ','message':True,'status':status.HTTP_200_OK})
-            # email=request.data.get('email')
-            
-
         except Exception as error:
             traceback.print_exc()
             return Response({'response':str(error),'message':False,'status':status.HTTP_200_OK})
   
+
 
 class LoginView(viewsets.ViewSet):
     # permission_classes = [TokenHasReadWriteScope]
@@ -132,3 +127,45 @@ class LogOutView(viewsets.ViewSet):
         except Exception as error:
             traceback.print_exc()
             return Response({'response':str(error),'message':False,'status':status.HTTP_200_OK})
+
+
+
+class DetailViewSet(viewsets.ViewSet):
+    def list(self,request):
+        detaillist = Detail.objects.all()
+        data=[]
+        for detaillists in detaillist:
+            data.append({
+        
+                'id':detaillists.id,
+                'image':str(detaillists.image)
+            })
+        return Response({'data list':data})
+    def retrieve(self, request, pk=None):
+        detail_retrive=Detail.objects.get(id=pk) 
+        datad=[{
+            'image':str(detail_retrive.image)
+        }]
+        return Response({'detail retrive':datad})
+    def destroy(self, request, pk=None):
+        detail_destroy=Detail.objects.filter(id=pk).delete()
+        return Response({'Successfully data delete'})
+    def update(self,request,pk=None):
+        detail_Object=Detail.objects.get(id=pk)
+        image=request.data.get('image')
+        detail_Object.image = image
+        detail_Object.save() 
+        return Response({"response":'Create Data'})        
+    def create(self,request):
+        detail_id=request.data.get('detail_id')
+        detail_create=MyUser.objects.get(id=detail_id)
+        print(detail_create,detail_create)
+        detail_Object=Detail()
+        detail_Object.userfor=detail_create
+        detail_Object.image = request.data.get('image')
+        detail_Object.save()
+        return Response({"response":'Create Data'})
+
+
+
+

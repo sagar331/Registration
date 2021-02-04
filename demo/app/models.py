@@ -70,4 +70,8 @@ class MyUser(AbstractBaseUser):
         # Simplest possible answer: All admins are staff
         return self.is_admin
 
-
+class Detail(models.Model):
+    userfor = models.ForeignKey(MyUser,on_delete=models.CASCADE,related_name='userfor')
+    image = models.FileField(blank=True, default="",upload_to="media/images")
+    def __str__(self):
+        return str(self.userfor)
